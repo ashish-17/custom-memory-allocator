@@ -31,5 +31,8 @@
 # Log files
 *.txt
 
+# Ignore eclipse settings
+.cproject
+
 # Debug files
 *.dSYM/
