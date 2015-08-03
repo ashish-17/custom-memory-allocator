@@ -33,6 +33,7 @@
 
 # Ignore eclipse settings
 .cproject
+.project
 
 # Debug files
 *.dSYM/
