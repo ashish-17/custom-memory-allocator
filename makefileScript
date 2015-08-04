@@ -8,7 +8,7 @@ else
 fi
 
 homeDir=`pwd`
-loggerPath="utils/mini-logger/Debug/"
+loggerPath="utils/mini-logger/staticLib/"
 waitFreePoolPath="allocators/WaitFreeMemAlloc/staticLib/"
 hoardPath="allocators/Hoard/src/"
 benchmarksNames=("cache-scratch" "cache-thrash" "linux-scalability" "thread-test")
