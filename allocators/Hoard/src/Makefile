@@ -70,9 +70,9 @@ LINUX_GCC_x86_64_COMPILE = $(CXX) -std=c++11 $(CPPFLAGS) -g -W -Wconversion -Wal
 
 LINUX_GCC_x86_64_COMPILE_DEBUG = g++ -std=c++11 $(CPPFLAGS) -g -W -Wconversion -Wall -I/usr/include/nptl -fno-builtin-malloc -pipe -fPIC $(INCLUDES) -D_REENTRANT=1 -shared $(GNU_SRC) -Bsymbolic -o libhoard.so -ldl -lpthread
 
-LINUX_GCC_x86_COMPILE_STATIC = g++ -std=c++11 $(CPPFLAGS) -g -I/usr/include/nptl -static -pipe -finline-limit=20000 -fno-builtin-malloc -finline-functions  -DNDEBUG  $(INCLUDES) -D_REENTRANT=1  -c $(GNU_SRC) ; ar cr libhoard.a libhoard.o
+LINUX_GCC_x86_COMPILE_STATIC = g++ -std=c++11 $(CPPFLAGS) -g -I/usr/include/nptl -static -pipe -finline-limit=20000 -fno-builtin-malloc -finline-functions  -DNDEBUG  $(INCLUDES) -D_REENTRANT=1  -c $(GNU_SRC) ; ar cr libhoard.a *.o
 
-LINUX_GCC_x86_64_COMPILE_STATIC = g++ -std=c++11 $(CPPFLAGS) -g -W -Wconversion -Wall -I/usr/include/nptl -static -pipe -fPIC -fno-builtin-malloc -finline-limit=20000 -finline-functions  -DNDEBUG  $(INCLUDES) -D_REENTRANT=1 -shared -c $(GNU_SRC) -Bsymbolic ; ar cr libhoard.a libhoard.o
+LINUX_GCC_x86_64_COMPILE_STATIC = g++ -std=c++11 $(CPPFLAGS) -g -W -Wconversion -Wall -I/usr/include/nptl -static -pipe -fPIC -fno-builtin-malloc -finline-limit=20000 -finline-functions  -DNDEBUG  $(INCLUDES) -D_REENTRANT=1 -shared -c $(GNU_SRC) -Bsymbolic ; ar cr libhoard.a *.o
 
 LINUX_GCC_x86_COMPILE_DEBUG = g++ -m32 -std=c++11 $(CPPFLAGS) -fPIC -fno-inline -I/usr/include/nptl -fno-builtin-malloc -g -pipe $(INCLUDES) -D_REENTRANT=1  -shared $(GNU_SRC) -Bsymbolic -o libhoard.so -ldl -lpthread
 
