@@ -6,7 +6,7 @@ allocatorPath="../benchmarks/linux-scalability/Debug/"
 
 allocatorName="linux-scalability"
 
-outputFile="../../Output/outputLinuxScalability"
+outputFile="../../Output/$1/outputLinuxScalability"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfIterations>"
 

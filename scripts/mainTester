@@ -1,5 +1,8 @@
 #!/bin/bash
-./testerCacheScratch
-./testerCacheThrash
-./testerLinuxScalability 
-./testerThreadTest  
+
+currentDate=`date +"%m-%d-%Y-%H:%M:%S"`
+mkdir ../../Output/$currentDate
+./testerCacheScratch $currentDate
+./testerCacheThrash $currentDate
+./testerLinuxScalability $currentDate
+./testerThreadTest $currentDate

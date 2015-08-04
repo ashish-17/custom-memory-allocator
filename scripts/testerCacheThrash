@@ -6,7 +6,7 @@ allocatorPath="../benchmarks/cache-thrash/Debug/"
 
 allocatorName="cache-thrash"
 
-outputFile="../../Output/outputCacheThrash"
+outputFile="../../Output/$1/outputCacheThrash"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
 

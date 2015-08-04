@@ -6,7 +6,7 @@ allocatorPath="../benchmarks/cache-scratch/Debug/"
 
 allocatorName="cache-scratch"
 
-outputFile="../../Output/outputCacheScratch"
+outputFile="../../Output/$1/outputCacheScratch"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
 

@@ -6,7 +6,7 @@ allocatorPath="../benchmarks/thread-test/Debug/"
 
 allocatorName="thread-test"
 
-outputFile="../../Output/outputThreadTest"
+outputFile="../../Output/$1/outputThreadTest"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfIterations> <noOfRepetitions>"
 
