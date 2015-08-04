@@ -20,9 +20,9 @@ typedef struct _ThreadData {
 	int time;
 } ThreadData;
 
-//extern void* xxmalloc(int);
+extern void* xxmalloc(int);
 
-//extern void xxfree(void*);
+extern void xxfree(void*);
 
 void workerNormal(void *data) {
 	LOG_PROLOG();
@@ -71,7 +71,6 @@ void workerWaitFreePool(void *data) {
 	LOG_EPILOG();
 }
 
-/*
 void workerHoard(void *data) {
 	LOG_PROLOG();
 	clock_t start, diff;
@@ -94,7 +93,7 @@ void workerHoard(void *data) {
 	threadData->time = diff * 1000 / CLOCKS_PER_SEC;
 	LOG_EPILOG();
 }
-*/
+
 /*
 void workerMichael(void *data) {
 	ThreadData* threadData = (ThreadData*) threadData;
@@ -151,9 +150,9 @@ int main(int argc, char* argv[]) {
 		else if (allocatorNo == 1) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
 		}
-		/*else if (allocatorNo == 2) {
+		else if (allocatorNo == 2) {
 			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
-		}*/
+		}
 		else if (allocatorNo == 3) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
 		}
