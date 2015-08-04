@@ -1,9 +1,6 @@
 [submodule "utils/mini-logger"]
 	path = utils/mini-logger
 	url = https://github.com/ashish-17/mini-logger.git
-[submodule "allocators/Hoard"]
-	path = allocators/Hoard
-	url = https://github.com/emeryberger/Hoard.git
 [submodule "allocators/WaitFreeMemAlloc"]
 	path = allocators/WaitFreeMemAlloc
 	url = https://github.com/ashish-17/WaitFreeMemAlloc.git
