@@ -1,0 +1,71 @@
+#!/bin/bash
+
+configFile="configLinuxScalability"
+
+allocatorPath="/Users/architaagarwal/Documents/workspace/LinuxScalability/Debug"
+
+allocatorName="LinuxScalability"
+
+outputFile="outputLinuxScalability"
+
+argumentsMeaning="<nThreads> <objectSize> <noOfIterations>"
+
+i=0
+
+while read line
+do
+	if [ $i == 0 ]; then
+		nThreadsTemp=$line
+	elif [ $i == 1 ]; then
+		objTemp=$line
+	elif [ $i == 2 ]; then
+		iterTemp=$line
+	fi
+	(( i++ ))
+done < $configFile
+
+
+IFS=' '
+read -a nThreads <<< "$nThreadsTemp"
+read -a obj <<< "$objTemp"	
+read -a iter <<< "$iterTemp"
+
+
+echo "Going to execute" $allocatorName "on" configFile
+echo $argumentsMeaning > $outputFile
+
+
+for objIndex in "${obj[@]}"
+do
+    for iterIndex in "${iter[@]}"
+    do
+    	threadIndex=1
+	while [ $threadIndex -le ${nThreads[0]} ]
+	do
+	    c=0
+	    output="$threadIndex $objIndex $iterIndex"
+	    while [ $c -le 2 ]
+	    do
+	        temp="$c $threadIndex $objIndex $iterIndex"  
+                temp1=`$allocatorPath/$allocatorName $temp`
+		if [ ! $temp1 ]; then
+                    temp1=-1
+                fi
+                echo "$c on $threadIndex performing $iterIndex iterations=$temp1"
+		output="$output $temp1"
+	        (( c++ ))      
+	    done
+	    work=$(( threadIndex * iterIndex ))
+            temp="0 1 $objIndex $work $repIndex"
+            temp1=`$allocatorPath/$allocatorName $temp`
+            if [ ! $temp1 ]; then
+                temp1=-1
+            fi
+	    echo "0,1 on 1 thread performing $work iterations=$temp1"
+            output="$output $temp1"
+            echo $output >> $outputFile
+    	    (( threadIndex++ ))    
+	done
+    done
+done
+    

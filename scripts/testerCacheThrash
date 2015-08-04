@@ -1,0 +1,77 @@
+#!/bin/bash
+
+configFile="configCacheThrash"
+
+allocatorPath="/Users/architaagarwal/Documents/workspace/Cache-thrash/Debug"
+
+allocatorName="Cache-thrash"
+
+outputFile="outputCacheThrash"
+
+argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
+
+i=0
+
+while read line
+do
+	if [ $i == 0 ]; then
+		nThreadsTemp=$line
+	elif [ $i == 1 ]; then
+		objTemp=$line
+	elif [ $i == 2 ]; then
+		iterTemp=$line
+	elif [ $i == 3 ]; then
+		repTemp=$line
+	fi
+	(( i++ ))
+done < $configFile
+
+
+IFS=' '
+read -a nThreads <<< "$nThreadsTemp"
+read -a obj <<< "$objTemp"	
+read -a iter <<< "$iterTemp"
+read -a rep <<< "$repTemp"
+
+
+echo "Going to execute" $allocatorName "on" configFile
+echo $argumentsMeaning > $outputFile
+
+
+for objIndex in "${obj[@]}"
+do
+    for iterIndex in "${iter[@]}"
+    do
+        for repIndex in "${rep[@]}"
+        do
+    	    threadIndex=1
+	    while [ $threadIndex -le ${nThreads[0]} ]
+	    do
+		c=0
+		output="$threadIndex $objIndex $iterIndex $repIndex"
+		while [ $c -le 2 ]
+		do
+	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
+                    temp1=`$allocatorPath/$allocatorName $temp`
+                    if [ ! $temp1 ]; then
+                        temp1=-1
+                    fi
+		    echo "$c on $threadIndex performing $iterIndex iterations=$temp1"
+                    output="$output $temp1"
+		    (( c++ ))      
+	        done
+		work=$(( threadIndex * iterIndex ))
+		temp="0 1 $objIndex $work $repIndex"
+		temp1=`$allocatorPath/$allocatorName $temp`
+                if [ ! $temp1 ]; then
+                    temp1=-1
+                fi
+		echo "0,1 on 1 thread performing $work iterations=$temp1"
+                output="$output $temp1"
+	        echo $output >> $outputFile
+		(( threadIndex++ ))    
+	    done
+        done
+    done
+done
+    
