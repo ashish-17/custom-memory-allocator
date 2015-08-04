@@ -1,14 +1,13 @@
 /*
- * CacheScratch.c
+ * LinuxScalability.c
  *
  *  Created on: 13-Jul-2015
  *      Author: architaagarwal
  */
-// This is also known as "Passive False"
+
+
 // Command line arguments:
-// <allocator flag> <nThreads> <objSize> <nIterations> <nTimesToWriteOnEachByte>
-// each thread allocates nIterations times objects of size objSize
-// and write on each byte of the object nTimesToWriteOnEachByte times.
+// <allocator flag> <nThreads> <objSize> <nIterations>
 
 #include <pthread.h>
 #include <stdio.h>
@@ -24,76 +23,67 @@ typedef struct _ThreadData {
 	int iterations;
 	int repetitions;
 	int threadId;
-	void *obj;
 } ThreadData;
 
 //extern void* xxmalloc(int);
 
 //extern void xxfree(void*);
 
-void* workerNormal(void *data) {
+void workerNormal(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	free(threadData->obj);
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = malloc(threadData->objSize);
-		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
-		// Write into ptr a bunch of times
-		for (int j = 0; j < threadData->repetitions; j++) {
-			for  (int k = 0; k < threadData->objSize; k++) {
-				*(ptr + k) = (char)k;
-				char temp = *(ptr + k);
-				temp++;
-			}
-		}
-		free(ptr);
+		ptr[i] = malloc(threadData->objSize);
+		//printf("%u\n", ptr[i]);
+		//*ptr[i] = 9;
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
+	for (int i = 0; i < threadData->iterations; i++) {
+		free(ptr[i]);
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+	}
+	free(ptr);
 	LOG_EPILOG();
-	return NULL;
 }
 
 void workerWaitFreePool(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	freeMem(threadData->threadId, threadData->obj);
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = allocate(threadData->threadId, 0);
+		ptr[i] = allocate(threadData->threadId, 0);
+		//printf("%u\n", ptr[i]);
+		//*ptr[i] = 9;
 		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
-		// Write into ptr a bunch of times
-		for (int j = 0; j < threadData->repetitions; j++) {
-			for  (int k = 0; k < threadData->objSize; k++) {
-				*(ptr + k) = (char)k;
-				char temp = *(ptr + k);
-				temp++;
-			}
-		}
-		freeMem(threadData->threadId, ptr);
 	}
+	for (int i = 0; i < threadData->iterations; i++) {
+		freeMem(threadData->threadId, ptr[i]);
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+	}
+	free(ptr);
 	LOG_EPILOG();
 }
 
 /*
-void* workerHoard(void *data) {
+void workerHoard(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	xxfree(threadData->obj);
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = xxmalloc(threadData->objSize);
-		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
-		// Write into ptr a bunch of times
-		for (int j = 0; j < threadData->repetitions; j++) {
-			for  (int k = 0; k < threadData->objSize; k++) {
-				*(ptr + k) = (char)k;
-				char temp = *(ptr + k);
-				temp++;
-			}
-		}
-		xxfree(ptr);
+		ptr[i] = xxmalloc(threadData->objSize);
+		//printf("%u\n", ptr[i]);
+		//*ptr[i] = 9;
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
+	for (int i = 0; i < threadData->iterations; i++) {
+		xxfree(ptr[i]);
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+	}
+	free(ptr);
 	LOG_EPILOG();
-	return NULL;
-}
-*/
+}*/
+
 /*
 void workerMichael(void *data) {
 	ThreadData* threadData = (ThreadData*) threadData;
@@ -108,14 +98,13 @@ int main(int argc, char* argv[]) {
 	//LOG_INIT_FILE();
 	LOG_PROLOG();
 
-	int allocatorNo, nThreads, objSize, iterations, repetitions;
+	int allocatorNo, nThreads, objSize, iterations;
 
-	if (argc == 6) {
+	if (argc == 5) {
 		allocatorNo = atoi(argv[1]);
 		nThreads = atoi(argv[2]);
 		objSize = atoi(argv[3]);
 		iterations = atoi(argv[4]);
-		repetitions = atoi(argv[5]);
 	}
 	else {
 		printf("Error: Not enough arguments provided\n");
@@ -127,24 +116,11 @@ int main(int argc, char* argv[]) {
 	pthread_t *threads = (pthread_t*)malloc(sizeof(pthread_t) * nThreads);
 	int rc;
 
-	if (allocatorNo == 0) {
-		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = malloc(objSize);
-		}
-	}
-	else if (allocatorNo == 1) {
-		int nBlocks = nThreads * 1 + 3 * nThreads;
-		createWaitFreePool(nBlocks, nThreads, 1, iterations, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
+	if (allocatorNo == 1) {
+		int nBlocks = nThreads * iterations;
+		createWaitFreePool(nBlocks, nThreads, iterations, iterations, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
 		//hashTableCreate(nBlocks);
-		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = allocate(0,1);
-		}
 	}
-	/*else if (allocatorNo == 2) {
-		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = xxmalloc(objSize);
-		}
-	}*/
 
 	start = clock();
 	for (int t = 0; t < nThreads; t++) {
@@ -152,15 +128,14 @@ int main(int argc, char* argv[]) {
 		threadData[t].nThreads = nThreads;
 		threadData[t].objSize = objSize;
 		threadData[t].iterations = iterations;
-		threadData[t].repetitions = repetitions;
 		threadData[t].threadId = t;
 		if (allocatorNo == 0) {
 			rc = pthread_create((threads + t), NULL, workerNormal, (threadData + t));
 		}
 		else if (allocatorNo == 1) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
-		}
-		/*else if (allocatorNo == 2) {
+		}/*
+		else if (allocatorNo == 2) {
 			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
 		}*/
 		else if (allocatorNo == 3) {
@@ -176,15 +151,12 @@ int main(int argc, char* argv[]) {
 	for (int t = 0; t < nThreads; t++) {
 		rc = pthread_join(threads[t], &status);
 	}
-
 	diff = clock() - start;
 	if (allocatorNo == 1) {
 		destroyWaitFreePool();
 	}
-
 	int msec = diff * 1000 / CLOCKS_PER_SEC;
-
-	printf("%d", msec);
+	printf("%d\n", msec);
 
 	free(threadData);
 
