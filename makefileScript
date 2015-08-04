@@ -1,0 +1,55 @@
+#!/bin/bash
+
+arg=$1
+if [ $arg == "clean" ]; then
+	hoardArg=""           #not needed if clean is defined
+else
+	hoardArg=$1
+fi
+
+homeDir=`pwd`
+loggerPath="utils/mini-logger/Debug/"
+waitFreePoolPath="allocators/WaitFreeMemAlloc/staticLib/"
+hoardPath="allocators/Hoard/src/"
+benchmarksNames=("cache-scratch" "cache-thrash" "linux-scalability" "thread-test")
+
+if [ $arg == "clean" ]; then
+	echo "Cleaning mini-logger"
+	cd $homeDir/$loggerPath
+	make clean
+	
+	echo "Cleaning WaitFreePool"
+	cd $homeDir/$waitFreePoolPath
+	make clean
+
+	echo "Cleaning Hoard"
+	cd $homeDir/$hoardPath
+	make clean
+
+	for benchmark in "${benchmarksNames[@]}"; 
+	do
+		echo "Cleaning $benchmark"
+		cd $homeDir/benchmarks/$benchmark/Debug
+		make clean
+	done
+	
+else
+	echo "Going to make mini-logger"
+	cd $homeDir/$loggerPath
+        make
+        
+        echo "Going to make WaitFreePool"
+        cd $homeDir/$waitFreePoolPath
+        make
+
+        echo "Going to make Hoard"
+        cd $homeDir/$hoardPath
+        make $hoardArg
+
+	for benchmark in "${benchmarksNames[@]}";
+        do
+                echo "Going to make $benchmark"
+                cd $homeDir/benchmarks/$benchmark/Debug
+                make
+        done
+fi
