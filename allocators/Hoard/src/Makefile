@@ -56,6 +56,12 @@ MACOS_COMPILE = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -ar
 
 MACOS_COMPILE_DEBUG = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -arch i386 -arch x86_64 -pipe -g -O0 -Wall $(INCLUDES) -D_REENTRANT=1 -compatibility_version 1 -current_version 1 -dynamiclib $(MACOS_SRC) -o libhoard.dylib -ldl -lpthread
 
+#################### Added by Archita #################
+
+MACOS_COMPILE_STATIC = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024  -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -current_version 1 -D'CUSTOM_PREFIX(x)=xx\#\#x' $(MACOS_SRC) -c -ldl -lpthread; ar cr libhoard.a libhoard.o
+
+######################################################
+
 LINUX_GCC_x86_COMPILE = g++ -std=c++11 -m32 $(CPPFLAGS) -I/usr/include/nptl -ffast-math -g -fno-builtin-malloc -malign-double -pipe -finline-limit=20000 -finline-functions  -DNDEBUG  $(INCLUDES) -D_REENTRANT=1 -shared  $(GNU_SRC) -Bsymbolic -o libhoard.so -ldl -lpthread
 
 LINUX_GCC_x86_64_COMPILE = $(CXX) -std=c++11 $(CPPFLAGS) -g -W -Wconversion -Wall -I/usr/include/nptl -fno-builtin-malloc -pipe -fPIC -DNDEBUG  $(INCLUDES) -D_REENTRANT=1 -shared   $(GNU_SRC) -Bsymbolic -o libhoard.so -ldl -lpthread
@@ -109,6 +115,9 @@ macos:
 
 macos-debug:
 	$(MACOS_COMPILE_DEBUG)
+
+macos-static:
+	$(MACOS_COMPILE_STATIC)
 
 freebsd:
 	$(FREEBSD_COMPILE)

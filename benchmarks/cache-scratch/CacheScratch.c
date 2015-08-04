@@ -27,9 +27,9 @@ typedef struct _ThreadData {
 	void *obj;
 } ThreadData;
 
-//extern void* xxmalloc(int);
+extern void* xxmalloc(int);
 
-//extern void xxfree(void*);
+extern void xxfree(void*);
 
 void* workerNormal(void *data) {
 	LOG_PROLOG();
@@ -72,7 +72,7 @@ void workerWaitFreePool(void *data) {
 	LOG_EPILOG();
 }
 
-/*
+
 void* workerHoard(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
@@ -93,7 +93,7 @@ void* workerHoard(void *data) {
 	LOG_EPILOG();
 	return NULL;
 }
-*/
+
 /*
 void workerMichael(void *data) {
 	ThreadData* threadData = (ThreadData*) threadData;
@@ -140,11 +140,11 @@ int main(int argc, char* argv[]) {
 			threadData[t].obj = allocate(0,1);
 		}
 	}
-	/*else if (allocatorNo == 2) {
+	else if (allocatorNo == 2) {
 		for (int t = 0; t < nThreads; t++) {
 			threadData[t].obj = xxmalloc(objSize);
 		}
-	}*/
+	}
 
 	start = clock();
 	for (int t = 0; t < nThreads; t++) {
@@ -160,9 +160,9 @@ int main(int argc, char* argv[]) {
 		else if (allocatorNo == 1) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
 		}
-		/*else if (allocatorNo == 2) {
+		else if (allocatorNo == 2) {
 			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
-		}*/
+		}
 		else if (allocatorNo == 3) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
 		}
