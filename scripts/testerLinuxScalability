@@ -2,11 +2,11 @@
 
 configFile="configLinuxScalability"
 
-allocatorPath="/Users/architaagarwal/Documents/workspace/LinuxScalability/Debug"
+allocatorPath="../benchmarks/linux-scalability/Debug/"
 
-allocatorName="LinuxScalability"
+allocatorName="linux-scalability"
 
-outputFile="outputLinuxScalability"
+outputFile="../../Output/outputLinuxScalability"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfIterations>"
 

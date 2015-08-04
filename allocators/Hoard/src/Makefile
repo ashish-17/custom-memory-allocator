@@ -58,7 +58,7 @@ MACOS_COMPILE_DEBUG = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=10
 
 #################### Added by Archita #################
 
-MACOS_COMPILE_STATIC = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024  -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -current_version 1 -D'CUSTOM_PREFIX(x)=xx\#\#x' $(MACOS_SRC) -c -ldl -lpthread; ar cr libhoard.a libhoard.o
+MACOS_COMPILE_STATIC = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024  -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -current_version 1 -D'CUSTOM_PREFIX(x)=xx\#\#x' -c $(MACOS_SRC) -ldl -lpthread; ar cr libhoard.a *.o
 
 ######################################################
 

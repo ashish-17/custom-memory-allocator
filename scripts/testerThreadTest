@@ -2,11 +2,11 @@
 
 configFile="configThreadTest"
 
-allocatorPath="/Users/architaagarwal/Documents/workspace/ThreadTest/Debug"
+allocatorPath="../benchmarks/thread-test/Debug/"
 
-allocatorName="ThreadTest"
+allocatorName="thread-test"
 
-outputFile="outputThreadTest"
+outputFile="../../Output/outputThreadTest"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfIterations> <noOfRepetitions>"
 

@@ -2,11 +2,11 @@
 
 configFile="configCacheThrash"
 
-allocatorPath="/Users/architaagarwal/Documents/workspace/Cache-thrash/Debug"
+allocatorPath="../benchmarks/cache-thrash/Debug/"
 
-allocatorName="Cache-thrash"
+allocatorName="cache-thrash"
 
-outputFile="outputCacheThrash"
+outputFile="../../Output/outputCacheThrash"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
 

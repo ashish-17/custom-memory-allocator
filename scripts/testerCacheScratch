@@ -2,11 +2,11 @@
 
 configFile="configCacheScratch"
 
-allocatorPath="/Users/architaagarwal/Documents/workspace/Cache-scratch/Debug"
+allocatorPath="../benchmarks/cache-scratch/Debug/"
 
-allocatorName="Cache-scratch"
+allocatorName="cache-scratch"
 
-outputFile="outputCacheScratch"
+outputFile="../../Output/outputCacheScratch"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
 
