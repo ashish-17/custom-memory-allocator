@@ -28,7 +28,7 @@ all: linux-scalability
 linux-scalability: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L../../../allocators/WaitFreeMemAlloc/Debug -L../../../utils/mini-logger/Debug/ -o "linux-scalability" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L../../../allocators/WaitFreeMemAlloc/staticLib -L../../../utils/mini-logger/staticLib/ -o "linux-scalability" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
