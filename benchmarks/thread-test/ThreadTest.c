@@ -14,7 +14,7 @@
 #include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
 #include <time.h>
-#include "../../allocators/michael/michael.h"
+//#include "../../allocators/michael/michael.h"
 
 typedef struct _ThreadData {
 	int allocatorNo;
@@ -26,8 +26,9 @@ typedef struct _ThreadData {
 } ThreadData;
 
 extern void* xxmalloc(int);
-
 extern void xxfree(void*);
+extern void* m_malloc(size_t sz);
+extern void m_free(void* ptr);
 
 void workerNormal(void *data) {
 	LOG_PROLOG();
