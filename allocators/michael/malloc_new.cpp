@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+// Archita -- changed malloc and free to m_malloc and m_free
+
 extern "C" {
 #include "michael.h"
 }
@@ -24,31 +26,31 @@ extern "C" {
 
 void* operator new(std::size_t sz) throw (std::bad_alloc)
 {
-  return malloc(sz);
+  return m_malloc(sz);
 }
 
 void* operator new (size_t sz, const std::nothrow_t&) throw()
 {
-  return malloc(sz);
+  return m_malloc(sz);
 }
 
 void operator delete (void * ptr) throw()
 {
-  free(ptr);
+  m_free(ptr);
 }
 
 void* operator new[](std::size_t sz) throw (std::bad_alloc)
 {
-  return malloc(sz);
+  return m_malloc(sz);
 }
 
 void* operator new[] (size_t sz, const std::nothrow_t&) throw()
 {
-  return malloc(sz);
+  return m_malloc(sz);
 }
 
 void operator delete[] (void * ptr) throw()
 {
-  free(ptr);
+  m_free(ptr);
 }
 

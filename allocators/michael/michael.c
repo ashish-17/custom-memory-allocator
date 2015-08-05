@@ -595,7 +595,7 @@ static void* alloc_large_block(size_t sz)
 	return (void*)(addr + PTR_SIZE); 
 }
 
-void* malloc(size_t sz)
+void* m_malloc(size_t sz) // Archita
 { 
 	procheap *heap;
 	void* addr;
@@ -645,7 +645,7 @@ void* malloc(size_t sz)
 	} 
 }
 
-void free(void* ptr) 
+void m_free(void* ptr) // Archita 
 {
 	descriptor* desc;
 	void* sb;

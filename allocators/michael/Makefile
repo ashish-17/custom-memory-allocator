@@ -51,5 +51,5 @@ malloc_new.o:	malloc_new.cpp michael.h
 		$(CXX) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c malloc_new.cpp
 
 libmichael.so:	michael.o malloc_new.o
-		$(CXX) $(CFLAGS) $(OPT) michael.o malloc_new.o -o libmichael.so $(CLFLAGS) -shared
-
+#		$(CXX) $(CFLAGS) $(OPT) michael.o malloc_new.o -o libmichael.so $(CLFLAGS) -shared
+		ar -cvq libmichael.a *.o

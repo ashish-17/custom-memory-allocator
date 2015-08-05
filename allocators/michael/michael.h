@@ -94,8 +94,8 @@ struct Procheap {
 	sizeclass*		sc;		// pointer to parent sizeclass
 };
 
-extern void* malloc(size_t sz);
-extern void free(void* ptr);
+extern void* m_malloc(size_t sz); // Archita -- names changed -- added m_ in the beginning
+extern void m_free(void* ptr); // Archita
 
 #endif	/* __MAGED_H__ */
 
