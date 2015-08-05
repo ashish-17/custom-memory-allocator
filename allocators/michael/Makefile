@@ -39,10 +39,10 @@ endif
 
 # Rules
 
-all:	libmichael.so 
+all:	libmichael.a 
 
 clean:
-	rm -f *.o *.so
+	rm -f *.o *.so *.a
 
 michael.o:	michael.h michael.c include-$(ASM)/atomic.h include-$(ASM)/queue.h
 		$(CC) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c michael.c
@@ -51,5 +51,7 @@ malloc_new.o:	malloc_new.cpp michael.h
 		$(CXX) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c malloc_new.cpp
 
 libmichael.so:	michael.o malloc_new.o
-#		$(CXX) $(CFLAGS) $(OPT) michael.o malloc_new.o -o libmichael.so $(CLFLAGS) -shared
-		ar -cvq libmichael.a *.o
+		$(CXX) $(CFLAGS) $(OPT) michael.o malloc_new.o -o libmichael.so $(CLFLAGS) -shared
+
+libmichael.a:	michael.o
+		$(CC) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c michael.c; ar -cvq libmichael.a michael.o
