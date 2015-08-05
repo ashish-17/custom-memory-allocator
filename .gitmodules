@@ -4,3 +4,6 @@
 [submodule "allocators/WaitFreeMemAlloc"]
 	path = allocators/WaitFreeMemAlloc
 	url = https://github.com/ashish-17/WaitFreeMemAlloc.git
+[submodule "allocators/michael"]
+	path = allocators/michael
+	url = https://github.com/scotts/michael.git
