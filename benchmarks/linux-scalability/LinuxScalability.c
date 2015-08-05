@@ -15,6 +15,7 @@
 #include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
 #include <time.h>
+#include "../../allocators/michael/michael.h"
 
 typedef struct _ThreadData {
 	int allocatorNo;
@@ -83,14 +84,24 @@ void workerHoard(void *data) {
 	LOG_EPILOG();
 }
 
-/*
 void workerMichael(void *data) {
-	ThreadData* threadData = (ThreadData*) threadData;
+	LOG_PROLOG();
+	ThreadData* threadData = (ThreadData*) data;
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
-		malloc(threadData->threadId);
+		ptr[i] = m_malloc(threadData->objSize);
+		//printf("%u\n", ptr[i]);
+		//*ptr[i] = 9;
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
+	for (int i = 0; i < threadData->iterations; i++) {
+		m_free(ptr[i]);
+		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+	}
+	free(ptr);
+	LOG_EPILOG();
 }
- */
+
 
 int main(int argc, char* argv[]) {
 	//LOG_INIT_CONSOLE();
@@ -138,7 +149,7 @@ int main(int argc, char* argv[]) {
 			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
 		}
 		else if (allocatorNo == 3) {
-			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
+			rc = pthread_create((threads + t), NULL, workerMichael, (threadData + t));
 		}
 		if (rc) {
 			printf("ERROR; return code from pthread_create() is %d", rc);

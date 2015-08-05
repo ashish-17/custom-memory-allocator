@@ -11,6 +11,7 @@ homeDir=`pwd`
 loggerPath="utils/mini-logger/staticLib/"
 waitFreePoolPath="allocators/WaitFreeMemAlloc/staticLib/"
 hoardPath="allocators/Hoard/src/"
+michaelPath="allocators/michael/"
 benchmarksNames=("cache-scratch" "cache-thrash" "linux-scalability" "thread-test")
 
 if [ $arg == "clean" ]; then
@@ -25,6 +26,10 @@ if [ $arg == "clean" ]; then
 	echo "Cleaning Hoard"
 	cd $homeDir/$hoardPath
 	make clean
+
+	echo "Cleaning Michael allocator"
+        cd $homeDir/$michaelPath
+        make clean
 
 	for benchmark in "${benchmarksNames[@]}"; 
 	do
@@ -45,6 +50,10 @@ else
         echo "Going to make Hoard"
         cd $homeDir/$hoardPath
         make $hoardArg
+
+	echo "Going to make Michael allocator"
+        cd $homeDir/$michaelPath
+        make
 
 	for benchmark in "${benchmarksNames[@]}";
         do
