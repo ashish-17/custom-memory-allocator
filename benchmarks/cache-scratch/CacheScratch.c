@@ -99,7 +99,7 @@ void* workerHoard(void *data) {
 void* workerMichael(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	xxfree(threadData->obj);
+	m_free(threadData->obj);
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = m_malloc(threadData->objSize);
 		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);

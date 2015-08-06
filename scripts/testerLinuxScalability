@@ -56,7 +56,7 @@ do
 	        (( c++ ))      
 	    done
 	    work=$(( threadIndex * iterIndex ))
-            temp="0 1 $objIndex $work $repIndex"
+            temp="0 1 $objIndex $work"
             temp1=`$allocatorPath/$allocatorName $temp`
             if [ ! $temp1 ]; then
                 temp1=-1
