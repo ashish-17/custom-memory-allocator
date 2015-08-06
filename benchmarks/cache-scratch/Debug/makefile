@@ -28,7 +28,7 @@ all: cache-scratch
 cache-scratch: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -L../../../allocators/michael -L../../../allocators/Hoard/src -L../../../utils/mini-logger/staticLib/ -o "cache-scratch" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -L../../../allocators/Hoard/src -L../../../utils/mini-logger/staticLib/ -o "cache-scratch" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

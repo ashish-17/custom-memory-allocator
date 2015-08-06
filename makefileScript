@@ -27,9 +27,9 @@ if [ $arg == "clean" ]; then
 	cd $homeDir/$hoardPath
 	make clean
 
-	echo "Cleaning Michael allocator"
-        cd $homeDir/$michaelPath
-        make clean
+#	echo "Cleaning Michael allocator"
+#        cd $homeDir/$michaelPath
+#        make clean
 
 	for benchmark in "${benchmarksNames[@]}"; 
 	do
@@ -51,9 +51,9 @@ else
         cd $homeDir/$hoardPath
         make $hoardArg
 
-	echo "Going to make Michael allocator"
-        cd $homeDir/$michaelPath
-        make
+#	echo "Going to make Michael allocator"
+#        cd $homeDir/$michaelPath
+#        make
 
 	for benchmark in "${benchmarksNames[@]}";
         do

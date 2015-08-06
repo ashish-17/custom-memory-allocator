@@ -28,8 +28,8 @@ typedef struct _ThreadData {
 
 extern void* xxmalloc(int);
 extern void xxfree(void*);
-extern void* m_malloc(size_t sz);
-extern void m_free(void* ptr);
+//extern void* m_malloc(size_t sz);
+//extern void m_free(void* ptr);
 
 void workerNormal(void *data) {
 	LOG_PROLOG();
@@ -84,7 +84,7 @@ void workerHoard(void *data) {
 	free(ptr);
 	LOG_EPILOG();
 }
-
+/*
 void workerMichael(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
@@ -102,7 +102,7 @@ void workerMichael(void *data) {
 	free(ptr);
 	LOG_EPILOG();
 }
-
+*/
 
 int main(int argc, char* argv[]) {
 	//LOG_INIT_CONSOLE();
@@ -148,10 +148,10 @@ int main(int argc, char* argv[]) {
 		}
 		else if (allocatorNo == 2) {
 			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
-		}
+		}/*
 		else if (allocatorNo == 3) {
 			rc = pthread_create((threads + t), NULL, workerMichael, (threadData + t));
-		}
+		}*/
 		if (rc) {
 			printf("ERROR; return code from pthread_create() is %d", rc);
 			exit(-1);
