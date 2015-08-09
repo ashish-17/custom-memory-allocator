@@ -13,7 +13,7 @@
 #include "../../allocators/WaitFreeMemAlloc/src/WaitFreePool.h"
 #include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 //#include "../../allocators/michael/michael.h"
 
 typedef struct _ThreadData {
@@ -101,7 +101,7 @@ void workerMichael(void *data) {
 	free(ptr);
 	LOG_EPILOG();
 }
-*/
+ */
 int main(int argc, char* argv[]) {
 	//	LOG_INIT_CONSOLE();
 	//	LOG_INIT_FILE();
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	clock_t start, diff;
+	struct timeval start, end;
 	ThreadData *threadData = (ThreadData*)malloc(nThreads * sizeof(ThreadData));
 	pthread_t *threads = (pthread_t*)malloc(sizeof(pthread_t) * nThreads);
 	int rc;
@@ -129,10 +129,9 @@ int main(int argc, char* argv[]) {
 	if (allocatorNo == 1) {
 		int nBlocks = nThreads * iterations;
 		createWaitFreePool(nBlocks, nThreads, iterations, iterations*repetitions, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
-		//hashTableCreate(nBlocks);
 	}
 
-	start = clock();
+	gettimeofday (&start, NULL);
 	for (int t = 0; t < nThreads; t++) {
 		threadData[t].allocatorNo = allocatorNo;
 		threadData[t].nThreads = nThreads;
@@ -162,12 +161,12 @@ int main(int argc, char* argv[]) {
 	for (int t = 0; t < nThreads; t++) {
 		rc = pthread_join(threads[t], &status);
 	}
-	diff = clock() - start;
+	gettimeofday (&end, NULL);
 	if (allocatorNo == 1) {
 		destroyWaitFreePool();
 	}
-	int msec = diff * 1000 / CLOCKS_PER_SEC;
-	printf("%d", msec);
+	long int timeTaken = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec ));
+	printf("%ld", timeTaken);
 
 	free(threadData);
 

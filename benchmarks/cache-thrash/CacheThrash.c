@@ -8,7 +8,7 @@
 #include "../../allocators/WaitFreeMemAlloc/src/WaitFreePool.h"
 #include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 //#include "../../allocators/michael/michael.h"
 
 typedef struct _ThreadData {
@@ -18,7 +18,6 @@ typedef struct _ThreadData {
 	int iterations;
 	int repetitions;
 	int threadId;
-	int time;
 } ThreadData;
 
 extern void* xxmalloc(int);
@@ -28,8 +27,6 @@ extern void xxfree(void*);
 
 void workerNormal(void *data) {
 	LOG_PROLOG();
-	clock_t start, diff;
-	start = clock();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = (char*) malloc(threadData->objSize);
@@ -44,16 +41,12 @@ void workerNormal(void *data) {
 		}
 		free(ptr);
 	}
-	diff = clock() - start;
-	threadData->time = diff * 1000 / CLOCKS_PER_SEC;
 	LOG_EPILOG();
 }
 
 
 void workerWaitFreePool(void *data) {
 	LOG_PROLOG();
-	clock_t start, diff;
-	start = clock();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = allocate(threadData->threadId, 0);
@@ -68,15 +61,11 @@ void workerWaitFreePool(void *data) {
 		}
 		freeMem(threadData->threadId, ptr);
 	}
-	diff = clock() - start;
-	threadData->time = diff * 1000 / CLOCKS_PER_SEC;
 	LOG_EPILOG();
 }
 
 void workerHoard(void *data) {
 	LOG_PROLOG();
-	clock_t start, diff;
-	start = clock();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = xxmalloc(threadData->objSize);
@@ -91,8 +80,6 @@ void workerHoard(void *data) {
 		}
 		xxfree(ptr);
 	}
-	diff = clock() - start;
-	threadData->time = diff * 1000 / CLOCKS_PER_SEC;
 	LOG_EPILOG();
 }
 /*
@@ -138,8 +125,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	//printf("allocator = %d, nThreads = %d, iterations = %d\n", allocatorNo, nThreads, iterations);
-	//clock_t start, diff;
+	struct timeval start, end;
 	ThreadData *threadData = (ThreadData*)malloc(nThreads * sizeof(ThreadData));
 	pthread_t *threads = (pthread_t*)malloc(sizeof(pthread_t) * nThreads);
 	int rc;
@@ -147,10 +133,9 @@ int main(int argc, char* argv[]) {
 	if (allocatorNo == 1) {
 		int nBlocks = nThreads * 1;
 		createWaitFreePool(nBlocks, nThreads, 1, iterations, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
-		//hashTableCreate(nBlocks);
 	}
 
-	//start = clock();
+	gettimeofday (&start, NULL);
 	for (int t = 0; t < nThreads; t++) {
 		threadData[t].allocatorNo = allocatorNo;
 		threadData[t].nThreads = nThreads;
@@ -158,7 +143,6 @@ int main(int argc, char* argv[]) {
 		threadData[t].iterations = iterations;
 		threadData[t].repetitions = repetitions;
 		threadData[t].threadId = t;
-		threadData[t].time = 0;
 
 		if (allocatorNo == 0) {
 			rc = pthread_create((threads + t), NULL, workerNormal, (threadData + t));
@@ -182,16 +166,12 @@ int main(int argc, char* argv[]) {
 	for (int t = 0; t < nThreads; t++) {
 		rc = pthread_join(threads[t], &status);
 	}
-	//diff = clock() - start;
+	gettimeofday (&end, NULL);
 	if (allocatorNo == 1) {
 		destroyWaitFreePool();
 	}
-	//int msec = diff * 1000 / CLOCKS_PER_SEC;
-	int msec = 0;
-	for (int i = 0; i < nThreads; i++) {
-		msec += threadData[i].time;
-	}
-	printf("%d",msec);
+	long int timeTaken = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec ));
+	printf("%ld", timeTaken);
 
 	free(threadData);
 
