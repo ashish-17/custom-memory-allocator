@@ -50,7 +50,6 @@
 
 
 #include <assert.h>
-
 extern "C" {
 
   void * xxmalloc (size_t);

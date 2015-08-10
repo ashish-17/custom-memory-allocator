@@ -20,8 +20,8 @@ typedef struct _ThreadData {
 	int threadId;
 } ThreadData;
 
-extern void* xxmalloc(int);
-extern void xxfree(void*);
+//extern void* xxmalloc(int);
+//extern void xxfree(void*);
 //extern void* m_malloc(size_t sz);
 //extern void m_free(void* ptr);
 
@@ -68,7 +68,7 @@ void workerHoard(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = xxmalloc(threadData->objSize);
+		char* ptr = malloc(threadData->objSize);
 		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
@@ -78,7 +78,7 @@ void workerHoard(void *data) {
 				temp++;
 			}
 		}
-		xxfree(ptr);
+		free(ptr);
 	}
 	LOG_EPILOG();
 }

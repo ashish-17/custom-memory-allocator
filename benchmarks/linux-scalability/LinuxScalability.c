@@ -26,8 +26,8 @@ typedef struct _ThreadData {
 	int threadId;
 } ThreadData;
 
-extern void* xxmalloc(int);
-extern void xxfree(void*);
+//extern void* xxmalloc(int);
+//extern void xxfree(void*);
 //extern void* m_malloc(size_t sz);
 //extern void m_free(void* ptr);
 
@@ -72,13 +72,11 @@ void workerHoard(void *data) {
 	ThreadData* threadData = (ThreadData*) data;
 	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
-		ptr[i] = xxmalloc(threadData->objSize);
-		//printf("%u\n", ptr[i]);
-		//*ptr[i] = 9;
+		ptr[i] = malloc(threadData->objSize);
 		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	for (int i = 0; i < threadData->iterations; i++) {
-		xxfree(ptr[i]);
+		free(ptr[i]);
 		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	free(ptr);

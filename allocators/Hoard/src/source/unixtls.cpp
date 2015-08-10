@@ -66,7 +66,7 @@
 
 
 #include "hoard/hoardtlab.h"
-
+#include <stdio.h>
 extern Hoard::HoardHeapType * getMainHoardHeap();
 
 #if defined(USE_THREAD_KEYWORD)
@@ -348,6 +348,7 @@ extern "C" int pthread_create (pthread_t *thread,
 #endif
 {
   // Force initialization of the TLAB before our first thread is created.
+printf("**cuson pthread\n");
   static volatile TheCustomHeapType * t = initializeCustomHeap();
   t;
 

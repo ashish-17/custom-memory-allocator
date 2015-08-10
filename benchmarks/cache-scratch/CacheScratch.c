@@ -28,8 +28,8 @@ typedef struct _ThreadData {
 	void *obj;
 } ThreadData;
 
-extern void* xxmalloc(int);
-extern void xxfree(void*);
+//extern void* xxmalloc(int);
+//extern void xxfree(void*);
 //extern void* m_malloc(size_t sz);
 //extern void m_free(void* ptr);
 
@@ -78,9 +78,9 @@ void workerWaitFreePool(void *data) {
 void* workerHoard(void *data) {
 	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	xxfree(threadData->obj);
+	free(threadData->obj);
 	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = xxmalloc(threadData->objSize);
+		char* ptr = malloc(threadData->objSize);
 		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
@@ -90,7 +90,7 @@ void* workerHoard(void *data) {
 				temp++;
 			}
 		}
-		xxfree(ptr);
+		free(ptr);
 	}
 	LOG_EPILOG();
 	return NULL;
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
 	}
 	else if (allocatorNo == 2) {
 		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = xxmalloc(objSize);
+			threadData[t].obj = malloc(objSize);
 		}
 	}/*
 	else if (allocatorNo == 3) {

@@ -2,7 +2,7 @@
 
 currentDate=`date +"%m-%d-%Y-%H:%M:%S"`
 mkdir ../../Output/$currentDate
-./testerCacheScratch $currentDate
-./testerCacheThrash $currentDate
-./testerLinuxScalability $currentDate
-./testerThreadTest $currentDate
+./testerCacheScratch $currentDate $1
+./testerCacheThrash $currentDate $1
+./testerLinuxScalability $currentDate $1
+./testerThreadTest $currentDate $1

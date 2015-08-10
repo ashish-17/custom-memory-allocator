@@ -52,7 +52,10 @@ FREEBSD_COMPILE = clang++ -std=c++11 -g $(CPPFLAGS) -fPIC -DNDEBUG  $(INCLUDES) 
 
 DEBIAN_COMPILE = g++-4.8 -std=c++11 -g -O3 -fPIC -DNDEBUG -I. -Iinclude -Iinclude/util -Iinclude/hoard -Iinclude/superblocks -IHeap-Layers -D_REENTRANT=1 -shared source/libhoard.cpp source/unixtls.cpp Heap-Layers/wrappers/wrapper.cpp -Bsymbolic -o libhoard.so -lpthread -lstdc++ -ldl
 
-MACOS_COMPILE = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -compatibility_version 1 -current_version 1 -c -D'CUSTOM_PREFIX(x)=xx\#\#x' $(MACOS_SRC)  -ldl -lpthread; ar rcs libhoard.a *.o
+#MACOS_COMPILE = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -compatibility_version 1 -current_version 1 -c -D'CUSTOM_PREFIX(x)=xx\#\#x' $(MACOS_SRC)  -ldl -lpthread; ar rcs libhoard.a *.o
+
+MACOS_COMPILE = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -arch i386 -arch x86_64 -pipe -g $(CPPFLAGS) -DNDEBUG $(INCLUDES) -D_REENTRANT=1 -compatibility_version 1 -current_version 1 -dynamiclib -D'CUSTOM_PREFIX(x)=xx\#\#x' $(MACOS_SRC) -o libhoard.dylib -ldl -lpthread 
+
 
 MACOS_COMPILE_DEBUG = clang++ -std=c++11 -fno-builtin-malloc -ftemplate-depth=1024 -arch i386 -arch x86_64 -pipe -g -O0 -Wall $(INCLUDES) -D_REENTRANT=1 -compatibility_version 1 -current_version 1 -dynamiclib $(MACOS_SRC) -o libhoard.dylib -ldl -lpthread
 
