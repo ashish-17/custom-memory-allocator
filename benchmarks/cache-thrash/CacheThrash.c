@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include "../../allocators/WaitFreeMemAlloc/src/WaitFreePool.h"
-#include "../../utils/mini-logger/logger.h"
+//#include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
 #include <sys/time.h>
 //#include "../../allocators/michael/michael.h"
@@ -26,11 +26,11 @@ typedef struct _ThreadData {
 //extern void m_free(void* ptr);
 
 void workerNormal(void *data) {
-	LOG_PROLOG();
+	//LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = (char*) malloc(threadData->objSize);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
 			for  (int k = 0; k < threadData->objSize; k++) {
@@ -41,16 +41,16 @@ void workerNormal(void *data) {
 		}
 		free(ptr);
 	}
-	LOG_EPILOG();
+	//LOG_EPILOG();
 }
 
 
 void workerWaitFreePool(void *data) {
-	LOG_PROLOG();
+	//LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = allocate(threadData->threadId, 0);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
 			for  (int k = 0; k < threadData->objSize; k++) {
@@ -61,15 +61,15 @@ void workerWaitFreePool(void *data) {
 		}
 		freeMem(threadData->threadId, ptr);
 	}
-	LOG_EPILOG();
+	//LOG_EPILOG();
 }
 
 void workerHoard(void *data) {
-	LOG_PROLOG();
+	//LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = malloc(threadData->objSize);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
 			for  (int k = 0; k < threadData->objSize; k++) {
@@ -80,7 +80,7 @@ void workerHoard(void *data) {
 		}
 		free(ptr);
 	}
-	LOG_EPILOG();
+	//LOG_EPILOG();
 }
 /*
 void workerMichael(void *data) {
@@ -109,7 +109,7 @@ void workerMichael(void *data) {
 int main(int argc, char* argv[]) {
 	//LOG_INIT_CONSOLE();
 	//LOG_INIT_FILE();
-	LOG_PROLOG();
+	//LOG_PROLOG();
 
 	int allocatorNo, nThreads, objSize, iterations, repetitions;
 
@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
 
 	free(threadData);
 
-	LOG_EPILOG();
-	LOG_INFO("Test Client");
+	//LOG_EPILOG();
+	//LOG_INFO("Test Client");
 	//	LOG_CLOSE();
 }

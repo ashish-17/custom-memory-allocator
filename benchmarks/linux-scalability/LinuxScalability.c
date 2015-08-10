@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include "../../allocators/WaitFreeMemAlloc/src/WaitFreePool.h"
-#include "../../utils/mini-logger/logger.h"
+//#include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
 #include <sys/time.h>
 //#include "../../allocators/michael/michael.h"
@@ -32,55 +32,55 @@ typedef struct _ThreadData {
 //extern void m_free(void* ptr);
 
 void workerNormal(void *data) {
-	LOG_PROLOG();
+//	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
 		ptr[i] = malloc(threadData->objSize);
 		//printf("%u\n", ptr[i]);
 		//*ptr[i] = 9;
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	for (int i = 0; i < threadData->iterations; i++) {
 		free(ptr[i]);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	free(ptr);
-	LOG_EPILOG();
+//	LOG_EPILOG();
 }
 
 void workerWaitFreePool(void *data) {
-	LOG_PROLOG();
+//	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
 		ptr[i] = allocate(threadData->threadId, 0);
 		//printf("%u\n", ptr[i]);
 		//*ptr[i] = 9;
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	for (int i = 0; i < threadData->iterations; i++) {
 		freeMem(threadData->threadId, ptr[i]);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	free(ptr);
-	LOG_EPILOG();
+//	LOG_EPILOG();
 }
 
 void workerHoard(void *data) {
-	LOG_PROLOG();
+//	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
 	for (int i = 0; i < threadData->iterations; i++) {
 		ptr[i] = malloc(threadData->objSize);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	for (int i = 0; i < threadData->iterations; i++) {
 		free(ptr[i]);
-		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 	}
 	free(ptr);
-	LOG_EPILOG();
+//	LOG_EPILOG();
 }
 /*
 void workerMichael(void *data) {
@@ -105,7 +105,7 @@ void workerMichael(void *data) {
 int main(int argc, char* argv[]) {
 	//LOG_INIT_CONSOLE();
 	//LOG_INIT_FILE();
-	LOG_PROLOG();
+//	LOG_PROLOG();
 
 	int allocatorNo, nThreads, objSize, iterations;
 
@@ -168,7 +168,7 @@ int main(int argc, char* argv[]) {
 
 	free(threadData);
 
-	LOG_EPILOG();
-	LOG_INFO("Test Client");
+//	LOG_EPILOG();
+//	LOG_INFO("Test Client");
 	//LOG_CLOSE();
 }

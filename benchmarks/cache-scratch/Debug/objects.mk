@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lpthread -ldl -lmini-logger -lWaitFreePool
+LIBS := -lpthread -ldl -lWaitFreePool
 

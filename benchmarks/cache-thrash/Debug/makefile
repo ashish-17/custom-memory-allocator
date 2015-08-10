@@ -28,7 +28,7 @@ all: cache-thrash
 cache-thrash: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -L../../../utils/mini-logger/staticLib/ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-thrash" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-thrash" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
