@@ -53,43 +53,32 @@ do
 		output="$threadIndex $objIndex $iterIndex $repIndex"
 		while [ $c -le 2 ]
 		do
-			echo "running on $c alocator"
 		    if [ $c == 2 ] && [ "$baseOS" == "macos" ]; then
 			export DYLD_INSERT_LIBRARIES="../allocators/Hoard/src/libhoard.dylib"
-			echo "DYLD PATH IS = $DYLD_INSERT_LIBRARIES"
 		    elif [ $c == 2 ]; then
 			export LD_PRELOAD="../allocators/Hoard/src/libhoard.so"
-			echo "LD_PRELOAD_PATH is $LD_PRELOAD"
 		    elif [ $c != 2 ] && [ "$baseOS" == "macos" ]; then
 			export DYLD_INSERT_LIBRARIES=
-                        echo "DYLD PATH IS = $DYLD_INSERT_LIBRARIES"
 		    else
 			export LD_PRELOAD=
-			echo "LD_PRELOAD_PATH is $LD_PRELOAD"
 		    fi	
 	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
-         #	    temp1=`$allocatorPath/$allocatorName $temp`
-		    $allocatorPath/$allocatorName $temp
-		    echo "=$c..."
+         	    temp1=`$allocatorPath/$allocatorName $temp`
            	    if [ ! $temp1 ]; then
                         temp1=-1
                     fi
-	 #           echo "$c on $threadIndex performing $iterIndex iterations=$temp1"
+	            echo "$c on $threadIndex performing $iterIndex iterations=$temp1"
 		    output="$output $temp1"
 		    (( c++ ))      
 	        done
 		if [ "$baseOS" == "macos" ]; then
 		    export DYLD_INSERT_LIBRARIES=
-		    echo "DYLD PATH IS = $DYLD_INSERT_LIBRARIES"
 		else
 		    export LD_PRELOAD=
-		    echo "LD_PRELOAD_PATH is $LD_PRELOAD"
 		fi
 		work=$(( threadIndex * iterIndex ))
                 temp="0 1 $objIndex $work $repIndex"
-         #       temp1=`$allocatorPath/$allocatorName $temp`
-		$allocatorPath/$allocatorName $temp
-                echo "=0,1..."
+                temp1=`$allocatorPath/$allocatorName $temp`
                 if [ ! $temp1 ]; then
                     temp1=-1
                 fi

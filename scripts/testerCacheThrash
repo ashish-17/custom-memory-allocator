@@ -10,6 +10,8 @@ outputFile="../../Output/$1/outputCacheThrash"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
 
+baseOS=$2
+
 i=0
 
 while read line
@@ -51,6 +53,15 @@ do
 		output="$threadIndex $objIndex $iterIndex $repIndex"
 		while [ $c -le 2 ]
 		do
+		    if [ $c == 2 ] && [ "$baseOS" == "macos" ]; then
+                        export DYLD_INSERT_LIBRARIES="../allocators/Hoard/src/libhoard.dylib"
+                    elif [ $c == 2 ]; then
+                        export LD_PRELOAD="../allocators/Hoard/src/libhoard.so"
+                    elif [ $c != 2 ] && [ "$baseOS" == "macos" ]; then
+                        export DYLD_INSERT_LIBRARIES=
+                    else
+                        export LD_PRELOAD=
+                    fi
 	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
                     temp1=`$allocatorPath/$allocatorName $temp`
                     if [ ! $temp1 ]; then
@@ -60,6 +71,11 @@ do
                     output="$output $temp1"
 		    (( c++ ))      
 	        done
+		if [ "$baseOS" == "macos" ]; then
+                    export DYLD_INSERT_LIBRARIES=
+                else
+                    export LD_PRELOAD=
+                fi
 		work=$(( threadIndex * iterIndex ))
 		temp="0 1 $objIndex $work $repIndex"
 		temp1=`$allocatorPath/$allocatorName $temp`

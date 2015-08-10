@@ -132,7 +132,6 @@ extern "C" void MYCDECL CUSTOM_FREE (void * ptr)
 
 extern "C" void * MYCDECL CUSTOM_MALLOC(size_t sz)
 {
-printf("custom mallocd*****\n");
   if (sz >> (sizeof(size_t) * 8 - 1)) {
     return NULL;
   }
