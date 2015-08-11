@@ -3,7 +3,7 @@
 # 	- ppc64 (IBM PowerPC, 64-bit)
 #	- x86 (Intel x86, 32-bit)
 #	- ia64 (Intel Itanium, 64-bit)	
-ASM		= x86
+ASM		= new
 
 ifeq ($(ASM), ppc64)
 	BITS = -m64
@@ -13,6 +13,10 @@ ifeq ($(ASM), x86)
 	BITS = -m32
 endif
 ifeq ($(ASM), ia64)
+	FPIC = -fPIC
+endif
+ifeq ($(ASM), new)
+	BITS = -m64
 	FPIC = -fPIC
 endif
 
@@ -39,7 +43,7 @@ endif
 
 # Rules
 
-all:	libmichael.a 
+all:	libmichael.so 
 
 clean:
 	rm -f *.o *.so *.a
@@ -50,8 +54,8 @@ michael.o:	michael.h michael.c include-$(ASM)/atomic.h include-$(ASM)/queue.h
 malloc_new.o:	malloc_new.cpp michael.h
 		$(CXX) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c malloc_new.cpp
 
-libmichael.so:	michael.o malloc_new.o
-		$(CXX) $(CFLAGS) $(OPT) michael.o malloc_new.o -o libmichael.so $(CLFLAGS) -shared
+libmichael.so:	michael.o
+		$(CXX) $(CFLAGS) $(OPT) michael.o -o libmichael.so $(CLFLAGS) -shared
 
 libmichael.a:	michael.o
 		$(CC) $(CFLAGS) $(OPT) -Iinclude-$(ASM) -c michael.c; ar -cvq libmichael.a michael.o
