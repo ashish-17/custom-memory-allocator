@@ -19,6 +19,10 @@ ifeq ($(ASM), new)
 	BITS = -m64
 	FPIC = -fPIC
 endif
+ifeq ($(ASM), x86_64)
+        BITS = -m64
+        FPIC = -fPIC
+endif
 
 CC		= gcc
 CXX		= g++
