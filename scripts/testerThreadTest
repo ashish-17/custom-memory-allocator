@@ -10,8 +10,6 @@ outputFile="../../Output/$1/outputThreadTest"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfIterations> <noOfRepetitions>"
 
-baseOS=$2
-
 i=0
 
 while read line
@@ -63,12 +61,16 @@ do
                         allocatorName="$allocator-Streamflow"
                     fi
 		    temp="$c $threadIndex $objIndex $iterIndex $repIndex"
-                    temp1=`$allocatorPath/$allocatorName $temp`
+		    cd $allocatorPath
+                    temp1=`$allocatorName $temp`
+		    cd -
                     if [ ! $temp1 ]; then
                         temp1=-1
                     fi
-	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
-                    temp1=`$allocatorPath/$allocatorName $temp`
+	            temp="$c $threadIndex $objIndex $iterIndex $repIndex" 
+		    cd $allocatorPath 
+                    temp1=`$allocatorName $temp`
+		    cd -
 		    if [ ! $temp1 ]; then
 			temp1=-1
 		    fi

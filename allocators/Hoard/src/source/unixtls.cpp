@@ -346,7 +346,8 @@ extern "C" int pthread_create (pthread_t *thread,
   throw ()
 #endif
 {
-  // Force initialization of the TLAB before our first thread is created.
+printf("pthread hoard\n");  
+// Force initialization of the TLAB before our first thread is created.
   static volatile TheCustomHeapType * t = initializeCustomHeap();
   t;
 

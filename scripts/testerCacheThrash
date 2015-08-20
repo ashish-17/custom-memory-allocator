@@ -61,7 +61,9 @@ do
                         allocatorName="$allocator-Streamflow"
 		    fi
 	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
-                    temp1=`$allocatorPath/$allocatorName $temp`
+		    cd $allocatorPath #this is required since rpath of allocators are relative in makefile
+                    temp1=`$allocatorName $temp`
+		    cd -
                     if [ ! $temp1 ]; then
                         temp1=-1
                     fi
@@ -72,7 +74,9 @@ do
 		allocatorName="$allocator-Normal"
 		work=$(( threadIndex * iterIndex ))
 		temp="0 1 $objIndex $work $repIndex"
-		temp1=`$allocatorPath/$allocatorName $temp`
+		cd $allocatorPath
+		temp1=`$allocatorName $temp`
+		cd -
                 if [ ! $temp1 ]; then
                     temp1=-1
                 fi
