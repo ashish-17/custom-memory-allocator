@@ -48,7 +48,7 @@ thread-test-Hoard: $(OBJS) $(USER_OBJS)
 thread-test-Streamflow: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -o "thread-test-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -lhoard -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -o "thread-test-Streamflow" -Xlinker -rpath=../../../allocators/streamflow -L../../../allocators/streamflow -lstreamflow -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
