@@ -1174,6 +1174,7 @@ static inline void headerize_object(void** object, void* ptr, size_t size, short
 
 void* malloc(size_t requested_size)
 {
+	printf("mallic stream\n");
 	int index;
 	void* pointer = NULL;
 	pageblock_t *pageblock;
