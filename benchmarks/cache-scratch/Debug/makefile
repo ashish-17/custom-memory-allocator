@@ -22,19 +22,33 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: cache-scratch
+all: cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
 
 # Tool invocations
-cache-scratch: $(OBJS) $(USER_OBJS)
+cache-scratch-WaitFreePool: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-scratch" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-scratch-WaitFreePool" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
+cache-scratch-Hoard: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -L../../../allocators/Hoard/src -o "cache-scratch-Hoard" $(OBJS) $(USER_OBJS) $(LIBS) -lhoard -Xlinker -rpath=../../../allocators/Hoard/src
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+cache-scratch-Streamflow: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-scratch-Streamflow" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) cache-scratch
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
 	-@echo ' '
 
 .PHONY: all clean dependents

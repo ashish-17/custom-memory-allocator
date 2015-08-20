@@ -162,6 +162,7 @@ extern "C" int xxpthread_create(pthread_t *thread,
                                 void * (*start_routine)(void *),
                                 void * arg) {
   // Force initialization of the TLAB before our first thread is created.
+  printf("custom pthr hoard\n");
   static TheCustomHeapType * t = getCustomHeap();
 
   anyThreadCreated = true;
