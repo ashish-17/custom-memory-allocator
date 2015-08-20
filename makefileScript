@@ -4,7 +4,7 @@ arg=$1
 if [ $arg == "clean" ]; then
 	hoardArg=""           #not needed if clean is defined
 else
-	hoardArg=$1
+	hoardArg="linux-gcc-x86-64"
 fi
 
 homeDir=`pwd`

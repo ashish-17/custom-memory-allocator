@@ -4,13 +4,11 @@ configFile="configCacheThrash"
 
 allocatorPath="../benchmarks/cache-thrash/Debug/"
 
-allocatorName="cache-thrash"
+allocator="cache-thrash"
 
 outputFile="../../Output/$1/outputCacheThrash"
 
 argumentsMeaning="<nThreads> <objectSize> <noOfObjectsToAllocate> <noOfTimesToWriteOnTheSameObject>"
-
-baseOS=$2
 
 i=0
 
@@ -53,15 +51,15 @@ do
 		output="$threadIndex $objIndex $iterIndex $repIndex"
 		while [ $c -le 2 ]
 		do
-		    if [ $c == 2 ] && [ "$baseOS" == "macos" ]; then
-                        export DYLD_INSERT_LIBRARIES="../allocators/Hoard/src/libhoard.dylib"
-                    elif [ $c == 2 ]; then
-                        export LD_PRELOAD="../allocators/Hoard/src/libhoard.so"
-                    elif [ $c != 2 ] && [ "$baseOS" == "macos" ]; then
-                        export DYLD_INSERT_LIBRARIES=
-                    else
-                        export LD_PRELOAD=
-                    fi
+		    if [ $c == 0 ]; then
+                    	allocatorName="$allocator-Normal"
+		    elif [ $c == 1 ]; then
+			allocatorName="$allocator-WaitFreePool"
+		    elif [ $c == 2 ]; then
+                        allocatorName="$allocator-Hoard"
+		    elif [ $c == 3 ]; then
+                        allocatorName="$allocator-Streamflow"
+		    fi
 	            temp="$c $threadIndex $objIndex $iterIndex $repIndex"  
                     temp1=`$allocatorPath/$allocatorName $temp`
                     if [ ! $temp1 ]; then
@@ -71,11 +69,7 @@ do
                     output="$output $temp1"
 		    (( c++ ))      
 	        done
-		if [ "$baseOS" == "macos" ]; then
-                    export DYLD_INSERT_LIBRARIES=
-                else
-                    export LD_PRELOAD=
-                fi
+		allocatorName="$allocator-Normal"
 		work=$(( threadIndex * iterIndex ))
 		temp="0 1 $objIndex $work $repIndex"
 		temp1=`$allocatorPath/$allocatorName $temp`

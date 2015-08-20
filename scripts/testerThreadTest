@@ -4,7 +4,7 @@ configFile="configThreadTest"
 
 allocatorPath="../benchmarks/thread-test/Debug/"
 
-allocatorName="thread-test"
+allocator="thread-test"
 
 outputFile="../../Output/$1/outputThreadTest"
 
@@ -53,16 +53,16 @@ do
 		output="$threadIndex $objIndex $iterIndex $repIndex"
 		while [ $c -le 2 ]
 		do
-		    if [ $c == 2 ] && [ "$baseOS" == "macos" ]; then
-                        export DYLD_INSERT_LIBRARIES="../allocators/Hoard/src/libhoard.dylib"
+                    if [ $c == 0 ]; then
+                        allocatorName="$allocator-Normal"
+                    elif [ $c == 1 ]; then
+                        allocatorName="$allocator-WaitFreePool"
                     elif [ $c == 2 ]; then
-                        export LD_PRELOAD="../allocators/Hoard/src/libhoard.so"
-                    elif [ $c != 2 ] && [ "$baseOS" == "macos" ]; then
-                        export DYLD_INSERT_LIBRARIES=
-                    else
-                        export LD_PRELOAD=
+                        allocatorName="$allocator-Hoard"
+                    elif [ $c == 3 ]; then
+                        allocatorName="$allocator-Streamflow"
                     fi
-                    temp="$c $threadIndex $objIndex $iterIndex $repIndex"
+		    temp="$c $threadIndex $objIndex $iterIndex $repIndex"
                     temp1=`$allocatorPath/$allocatorName $temp`
                     if [ ! $temp1 ]; then
                         temp1=-1
@@ -76,11 +76,7 @@ do
 		    output="$output $temp1"
 		    (( c++ ))      
 	        done
-		if [ "$baseOS" == "macos" ]; then
-                    export DYLD_INSERT_LIBRARIES=
-                else
-                    export LD_PRELOAD=
-                fi
+		allocatorName="$allocator-Normal"
 		work=$(( threadIndex * iterIndex ))
                 temp="0 1 $objIndex $work $repIndex"
                 temp1=`$allocatorPath/$allocatorName $temp`

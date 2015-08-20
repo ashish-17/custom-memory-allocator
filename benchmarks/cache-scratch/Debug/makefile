@@ -22,9 +22,16 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
+all: cache-scratch-Normal cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
 
 # Tool invocations
+cache-scratch-Normal: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-scratch-Normal" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
 cache-scratch-WaitFreePool: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
@@ -35,20 +42,20 @@ cache-scratch-WaitFreePool: $(OBJS) $(USER_OBJS)
 cache-scratch-Hoard: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -o "cache-scratch-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS) 
+	g++ -o "cache-scratch-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -lhoard -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS) 
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 cache-scratch-Streamflow: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "cache-scratch-Streamflow" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -o "cache-scratch-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -lhoard -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) cache-scratch-Normal cache-scratch-WaitFreePool cache-scratch-Hoard cache-scratch-Streamflow
 	-@echo ' '
 
 .PHONY: all clean dependents

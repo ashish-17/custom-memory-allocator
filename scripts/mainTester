@@ -2,10 +2,9 @@
 
 currentDate=`date +"%m-%d-%Y-%H:%M:%S"`
 mkdir ../../Output/$currentDate
-baseOS=$1
 
 echo "Calling the testers with base OS = $baseOS"
-./testerCacheScratch $currentDate $baseOS
-./testerCacheThrash $currentDate $baseOS
-./testerLinuxScalability $currentDate $baseOS
-./testerThreadTest $currentDate $baseOS
+./testerCacheScratch $currentDate 
+./testerCacheThrash $currentDate 
+./testerLinuxScalability $currentDate
+./testerThreadTest $currentDate 

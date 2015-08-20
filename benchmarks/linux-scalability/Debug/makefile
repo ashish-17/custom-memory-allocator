@@ -22,19 +22,39 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: linux-scalability
+all: linux-scalability-Normal linux-scalability-WaitFreePool linux-scalability-Hoard linux-scalability-Streamflow
 
-# Tool invocations
-linux-scalability: $(OBJS) $(USER_OBJS)
+linux-scalability-Normal: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib -o "linux-scalability" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "linux-scalability-Normal" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
+linux-scalability-WaitFreePool: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -L../../../allocators/WaitFreeMemAlloc/staticLib/ -o "linux-scalability-WaitFreePool" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+linux-scalability-Hoard: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -o "linux-scalability-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -lhoard -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS) 
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+linux-scalability-Streamflow: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C Linker'
+	g++ -o "linux-scalability-Hoard" -Xlinker -rpath=../../../allocators/Hoard/src -L../../../allocators/Hoard/src -lhoard -L../../../allocators/WaitFreeMemAlloc/staticLib/  $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+	
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) linux-scalability
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) linux-scalability-Normal linux-scalability-WaitFreePool linux-scalability-Hoard linux-scalability-Streamflow
 	-@echo ' '
 
 .PHONY: all clean dependents
