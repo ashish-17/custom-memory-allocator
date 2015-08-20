@@ -16,7 +16,6 @@
 //#include "../../utils/mini-logger/logger.h"
 #include <stdlib.h>
 #include <sys/time.h>
-//#include "../../allocators/michael/michael.h"
 
 typedef struct _ThreadData {
 	int allocatorNo;
@@ -28,13 +27,9 @@ typedef struct _ThreadData {
 	void *obj;
 } ThreadData;
 
-//extern void* xxmalloc(int);
-//extern void xxfree(void*);
-//extern void* m_malloc(size_t sz);
-//extern void m_free(void* ptr);
 
-void* workerNormal(void *data) {
-//	LOG_PROLOG();
+void* worker(void *data) {
+	//	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	free(threadData->obj);
 	for (int i = 0; i < threadData->iterations; i++) {
@@ -49,17 +44,17 @@ void* workerNormal(void *data) {
 		}
 		free(ptr);
 	}
-//	LOG_EPILOG();
+	//	LOG_EPILOG();
 	return NULL;
 }
 
 void workerWaitFreePool(void *data) {
-//	LOG_PROLOG();
+	//	LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
 	freeMem(threadData->threadId, threadData->obj);
 	for (int i = 0; i < threadData->iterations; i++) {
 		char* ptr = allocate(threadData->threadId, 0);
-//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
+		//		LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		// Write into ptr a bunch of times
 		for (int j = 0; j < threadData->repetitions; j++) {
 			for  (int k = 0; k < threadData->objSize; k++) {
@@ -70,57 +65,14 @@ void workerWaitFreePool(void *data) {
 		}
 		freeMem(threadData->threadId, ptr);
 	}
-//	LOG_EPILOG();
+	//	LOG_EPILOG();
 }
 
-
-void* workerHoard(void *data) {
-//	LOG_PROLOG();
-	ThreadData* threadData = (ThreadData*) data;
-	free(threadData->obj);
-	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = malloc(threadData->objSize);
-		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
-		// Write into ptr a bunch of times
-		for (int j = 0; j < threadData->repetitions; j++) {
-			for  (int k = 0; k < threadData->objSize; k++) {
-				*(ptr + k) = (char)k;
-				char temp = *(ptr + k);
-				temp++;
-			}
-		}
-		free(ptr);
-	}
-//	LOG_EPILOG();
-	return NULL;
-}
-/*
-void* workerMichael(void *data) {
-	LOG_PROLOG();
-	ThreadData* threadData = (ThreadData*) data;
-	m_free(threadData->obj);
-	for (int i = 0; i < threadData->iterations; i++) {
-		char* ptr = m_malloc(threadData->objSize);
-		//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
-		// Write into ptr a bunch of times
-		for (int j = 0; j < threadData->repetitions; j++) {
-			for  (int k = 0; k < threadData->objSize; k++) {
- *(ptr + k) = (char)k;
-				char temp = *(ptr + k);
-				temp++;
-			}
-		}
-		m_free(ptr);
-	}
-	LOG_EPILOG();
-	return NULL;
-}
- */
 
 int main(int argc, char* argv[]) {
 	//LOG_INIT_CONSOLE();
 	//LOG_INIT_FILE();
-//	LOG_PROLOG();
+	//	LOG_PROLOG();
 
 	int allocatorNo, nThreads, objSize, iterations, repetitions;
 
@@ -141,12 +93,7 @@ int main(int argc, char* argv[]) {
 	pthread_t *threads = (pthread_t*)malloc(sizeof(pthread_t) * nThreads);
 	int rc;
 
-	if (allocatorNo == 0) {
-		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = malloc(objSize);
-		}
-	}
-	else if (allocatorNo == 1) {
+	if (allocatorNo == 1) {
 		int nBlocks = nThreads * 1 + 3 * nThreads;
 		createWaitFreePool(nBlocks, nThreads, 1, iterations, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
 		//hashTableCreate(nBlocks);
@@ -154,16 +101,11 @@ int main(int argc, char* argv[]) {
 			threadData[t].obj = allocate(0,1);
 		}
 	}
-	else if (allocatorNo == 2) {
+	else {
 		for (int t = 0; t < nThreads; t++) {
 			threadData[t].obj = malloc(objSize);
 		}
-	}/*
-	else if (allocatorNo == 3) {
-		for (int t = 0; t < nThreads; t++) {
-			threadData[t].obj = m_malloc(objSize);
-		}
-	}*/
+	}
 
 	gettimeofday (&start, NULL);
 	for (int t = 0; t < nThreads; t++) {
@@ -173,18 +115,12 @@ int main(int argc, char* argv[]) {
 		threadData[t].iterations = iterations;
 		threadData[t].repetitions = repetitions;
 		threadData[t].threadId = t;
-		if (allocatorNo == 0) {
-			rc = pthread_create((threads + t), NULL, workerNormal, (threadData + t));
-		}
-		else if (allocatorNo == 1) {
+		if (allocatorNo == 1) {
 			rc = pthread_create((threads + t), NULL, workerWaitFreePool, (threadData + t));
 		}
-		else if (allocatorNo == 2) {
-			rc = pthread_create((threads + t), NULL, workerHoard, (threadData + t));
-		}/*
-		else if (allocatorNo == 3) {
-			rc = pthread_create((threads + t), NULL, workerMichael, (threadData + t));
-		}*/
+		else{
+			rc = pthread_create((threads + t), NULL, worker, (threadData + t));
+		}
 		if (rc) {
 			printf("ERROR; return code from pthread_create() is %d", rc);
 			exit(-1);
@@ -207,7 +143,7 @@ int main(int argc, char* argv[]) {
 
 	free(threadData);
 
-//	LOG_EPILOG();
-//	LOG_INFO("Test Client");
+	//	LOG_EPILOG();
+	//	LOG_INFO("Test Client");
 	//LOG_CLOSE();
 }
