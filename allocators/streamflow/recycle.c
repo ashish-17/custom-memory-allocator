@@ -51,6 +51,7 @@ double random_number()
 void* simulate_work(void* arg)
 {
 	unsigned long** reserve = malloc(rate * sizeof(void*));
+	//printf("pointer received = %u\n",reserve);
 	int i;
 	int j;
 	double rand;

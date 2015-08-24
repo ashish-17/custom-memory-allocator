@@ -3,7 +3,7 @@
 #	- HEADERS
 #	- BIBOP
 #	- RADIX_TREE
-META_METHOD	= RADIX_TREE
+META_METHOD	= RADIX_TREE 
 
 # What architecture are we on?
 # Options:
@@ -32,13 +32,13 @@ CC		= gcc
 CXX		= g++
 
 LDFLAGS		= -lpthread -lm -ldl #-L$(HOME)/lib 
-CFLAGS		= -D_REENTRANT -D$(ASM) -D$(META_METHOD) $(FPIC)
+CFLAGS		= -D_REENTRANT -D$(ASM) -D$(META_METHOD) $(FPIC) 
 #CFLAGS		+= -DPROFILE
 #CFLAGS		+= -DMEMORY
 
 GCC_CFLAGS	= -D_GNU_SOURCE -Wall $(BITS) -fno-strict-aliasing
 #GCC_OPT		= -O3 -ggdb #-pipe -finline-functions -fomit-frame-pointer
-GCC_OPT		= -O3 -ggdb #-Wall -Winline -Wwrite-strings -fmerge-all-constants -g -Wstrict-prototypes 
+GCC_OPT		= -ggdb #-Wall -Winline -Wwrite-strings -fmerge-all-constants -g -Wstrict-prototypes 
 
 ICC_CFLAGS	= -wd279 -wd981 -wd1418 -wd1469 -wd383 -wd869 -wd522 -wd810 -wd1684 -wd1338 -wd1684 -D_GNU_SOURCE
 ICC_OPT		= -O3 -g
@@ -62,7 +62,7 @@ ifndef OPT
 	$(error Need to define CC.)
 endif
 
-all:	libstreamflow.so 
+all:	libstreamflow.so recycle larson
 
 clean:
 	rm -f *.o *.so recycle larson 

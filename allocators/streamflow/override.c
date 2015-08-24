@@ -65,6 +65,7 @@ static void* wrapper(void* wargs)
 
 int pthread_create(pthread_t * thread, const pthread_attr_t * attr, void * (*start_routine)(void *), void * arg)
 {
+//	printf("pthread stream\n");
 	static create_fun_t real_create = NULL;
 	wrapper_args_t* wargs;
 	int result;

@@ -96,7 +96,6 @@ int main(int argc, char* argv[]) {
 	if (allocatorNo == 1) {
 		int nBlocks = nThreads * 1 + 3 * nThreads;
 		createWaitFreePool(nBlocks, nThreads, 1, iterations, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
-		//hashTableCreate(nBlocks);
 		for (int t = 0; t < nThreads; t++) {
 			threadData[t].obj = allocate(0,1);
 		}
@@ -106,7 +105,6 @@ int main(int argc, char* argv[]) {
 			threadData[t].obj = malloc(objSize);
 		}
 	}
-
 	gettimeofday (&start, NULL);
 	for (int t = 0; t < nThreads; t++) {
 		threadData[t].allocatorNo = allocatorNo;

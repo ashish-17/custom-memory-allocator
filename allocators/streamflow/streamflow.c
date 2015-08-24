@@ -1174,7 +1174,7 @@ static inline void headerize_object(void** object, void* ptr, size_t size, short
 
 void* malloc(size_t requested_size)
 {
-	printf("mallic stream\n");
+	//printf("mallic stream\n");
 	int index;
 	void* pointer = NULL;
 	pageblock_t *pageblock;
@@ -1524,8 +1524,9 @@ void free(void* object)
 void* calloc(size_t nmemb, size_t size)
 {
 	void* ptr;
-	
+//	printf("going to call maloc from calloc\n");	
 	ptr = malloc(nmemb * size);
+//	printf("ptr is \n");
 	if (!ptr) {
 		return NULL;
 	}

@@ -44,7 +44,7 @@ do
 	do
 	    c=0
 	    output="$threadIndex $objIndex $iterIndex"
-	    while [ $c -le 2 ]
+	    while [ $c -le 3 ]
 	    do
 	        if [ $c == 0 ]; then
                     allocatorName="$allocator-Normal"
