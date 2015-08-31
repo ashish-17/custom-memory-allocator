@@ -28,13 +28,13 @@ typedef struct _ThreadData {
 void worker(void *data) {
 	//LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations / threadData->nThreads);
 	for (int i = 0; i < threadData->repetitions; i++) {
-		for (int j = 0; j < threadData->iterations; j++) {
+		for (int j = 0; j < threadData->iterations / threadData->nThreads; j++) {
 			ptr[j] = malloc(threadData->objSize);
 			//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		}
-		for (int j = 0; j < threadData->iterations; j++) {
+		for (int j = 0; j < threadData->iterations / threadData->nThreads; j++) {
 			free(ptr[j]);
 			//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		}
@@ -46,13 +46,13 @@ void worker(void *data) {
 void workerWaitFreePool(void *data) {
 	//LOG_PROLOG();
 	ThreadData* threadData = (ThreadData*) data;
-	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations);
+	char **ptr = (char**) malloc(sizeof(char*) * threadData->iterations / threadData->nThreads);
 	for (int i = 0; i < threadData->repetitions; i++) {
-		for (int j = 0; j < threadData->iterations; j++) {
+		for (int j = 0; j < threadData->iterations / threadData->nThreads; j++) {
 			ptr[j] = allocate(threadData->threadId, 0);
 			//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		}
-		for (int j = 0; j < threadData->iterations; j++) {
+		for (int j = 0; j < threadData->iterations / threadData->nThreads; j++) {
 			freeMem(threadData->threadId, ptr[j]);
 			//LOG_INFO("thread %d ptr got is %u\n", threadData->threadId, ptr);
 		}
@@ -86,8 +86,8 @@ int main(int argc, char* argv[]) {
 	int rc;
 
 	if (allocatorNo == 1) {
-		int nBlocks = nThreads * iterations;
-		createWaitFreePool(nBlocks, nThreads, iterations, iterations*repetitions, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
+		int nBlocks = iterations;
+		createWaitFreePool(nBlocks, nThreads, iterations/nThreads, iterations*repetitions, objSize); // nBlocks, nThreads, chunkSize, donationsSteps
 	}
 
 	gettimeofday (&start, NULL);
