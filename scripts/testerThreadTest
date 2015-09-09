@@ -79,7 +79,7 @@ do
 		    (( c++ ))      
 	        done
 		allocatorName="$allocator-Normal"
-		work=$(( threadIndex * iterIndex ))
+		work=$iterIndex
                 temp="0 1 $objIndex $work $repIndex"
                 temp1=`$allocatorPath/$allocatorName $temp`
 		if [ ! $temp1 ]; then
